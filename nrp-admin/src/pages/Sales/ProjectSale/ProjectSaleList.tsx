@@ -50,13 +50,13 @@ interface ProjectItem {
   customerAddress: string   // 客户地址
 }
 
-// 列表响应数据
-interface ProjectListResponse {
-  list: ProjectItem[]
-  total: number
-  page: number
-  pageSize: number
-}
+// 列表响应数据（保留用于后续API开发）
+// interface ProjectListResponse {
+//   list: ProjectItem[]
+//   total: number
+//   page: number
+//   pageSize: number
+// }
 
 // 销售公司数据类型
 interface CompanyItem {
@@ -163,6 +163,7 @@ const ProjectSaleList: React.FC = () => {
   })
 
   // 根据搜索过滤公司选项
+
   const filteredCompanyOptions = useMemo(() => {
     if (!companySearchText) {
       return allCompanyOptions
@@ -410,6 +411,7 @@ const ProjectSaleList: React.FC = () => {
     })
   }
 
+
   // 分页变化
   const handlePageChange = (page: number, pageSize: number) => {
     setQueryParams({
@@ -421,9 +423,10 @@ const ProjectSaleList: React.FC = () => {
   }
 
   // 公司选择变化
-  const handleCompanyChange = (value: number[]) => {
+  const handleCompanyChange = (value: { label: string; value: number }[]) => {
     console.log('选择的公司:', value)
   }
+
 
   // 公司搜索
   const handleCompanySearch = (value: string) => {
@@ -443,7 +446,8 @@ const ProjectSaleList: React.FC = () => {
   }
 
   // 编辑
-  const handleEdit = (record: ProjectItem) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleEdit = (_record: ProjectItem) => {
     message.info('编辑功能开发中...')
     // TODO: 跳转到编辑页
   }
@@ -462,7 +466,11 @@ const ProjectSaleList: React.FC = () => {
               mode="multiple"
               placeholder="请输入公司名称搜索"
               options={filteredCompanyOptions}
-              style={{ width: 200 }}
+              style={{ width: 240 }}
+
+
+
+
               allowClear
               showSearch
               filterOption={false}
@@ -470,19 +478,28 @@ const ProjectSaleList: React.FC = () => {
               onChange={handleCompanyChange}
               onDropdownVisibleChange={handleCompanyDropdownVisible}
               labelInValue
-              maxTagCount={1}
+              maxTagCount={0}
               className={styles.companySelectWrap}
               maxTagPlaceholder={(omittedValues) => {
+                // omittedValues 是被省略的值（当 maxTagCount=0 时，这里会收到所有选择的值）
                 const values = omittedValues as { label: string; value: number }[]
-                const firstLabel = values[0]?.label || ''
-                const remainingCount = values.length - 1
-                if (remainingCount > 0) {
-                  // 截取第一个公司名称前10个字符
-                  const displayName = firstLabel.length > 10 ? firstLabel.substring(0, 10) + '...' : firstLabel
-                  return <Tag color="orange">{displayName} 等{values.length}个</Tag>
+                if (!values || values.length === 0) {
+                  return null
                 }
-                return null
+                if (values.length === 1) {
+                // 只选择一个公司时，直接显示公司名称
+                  return <Tag color="orange" className={styles.companyTag}>{values[0].label}</Tag>
+                }
+                // 选择多家公司时，显示第一个公司名称 + 数字
+                const firstCompany = values[0]
+                const displayName = firstCompany.label.length > 10 
+                  ? firstCompany.label.substring(0, 10) + '...'
+                  : firstCompany.label
+                return <Tag color="orange" className={styles.companyTag}>{displayName} {values.length}</Tag>
+
+
               }}
+
               dropdownRender={(menu) => (
                 <>
                   {menu}
@@ -495,6 +512,9 @@ const ProjectSaleList: React.FC = () => {
               )}
             />
           </Form.Item>
+
+
+
           <Form.Item name="projectCode" label="项目编号">
             <Input placeholder="请输入项目编号" style={{ width: 150 }} />
           </Form.Item>

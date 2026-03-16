@@ -97,13 +97,59 @@
   color: #666666 !important;
 }
 
-// 修复多选Select不换行
+// 修复多选Select不换行 - 单行展示选择的第一家公司和选择公司的家数
 .companySelectWrap {
-  :global(.ant-select-selection-wrap) {
+  // 确保选择项容器不换行，强制单行显示
+  :global(.ant-select-selection-overflow) {
     flex-wrap: nowrap !important;
+    overflow: hidden !important;
+    width: 100% !important;
   }
   
+  // 确保单个选择项不换行
   :global(.ant-select-selection-item) {
+    white-space: nowrap;
+    flex-wrap: nowrap;
+    max-width: 300px;
+    overflow: visible;
+    text-overflow: clip;
+  }
+
+  
+  // 确保输入框区域也不换行
+  :global(.ant-select-selector) {
+    flex-wrap: nowrap !important;
+    overflow: hidden !important;
+  }
+  
+  // 确保选择项内容区域不换行
+  :global(.ant-select-selection-overflow-item) {
+    flex-wrap: nowrap !important;
     white-space: nowrap !important;
   }
+  
+  // 公司标签样式
+  :global(.ant-tag) {
+    white-space: nowrap;
+    overflow: visible;
+    text-overflow: clip;
+    max-width: 300px;
+  }
+
 }
+
+// 自定义公司标签样式
+.companyTag {
+  white-space: nowrap;
+  overflow: visible;
+  text-overflow: clip;
+  max-width: 300px;
+  display: inline-flex;
+  width: auto;
+  background: transparent !important;
+  border: none !important;
+}
+
+
+
+

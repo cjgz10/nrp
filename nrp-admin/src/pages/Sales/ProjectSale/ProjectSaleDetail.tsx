@@ -57,7 +57,15 @@ interface SpaceInfo {
 }
 
 // 标签页类型
-type TabKey = 'basic' | 'quote' | 'contract' | 'budget' | 'budgetDetail' | 'order' | 'payment' | 'settlement' | 'output'
+type TabKey = 'basic' | 'quote' | 'contract' | 'contractOutput' | 'budget' | 'budgetDetail' | 'order' | 'payment' | 'settlement' | 'output'
+
+// 合同产值记录
+interface ContractOutputRecord {
+  id: string               // 合同产值记录ID（唯一编码）
+  contractCode: string     // 合同编号
+  confirmTime: string      // 合同产值确认时间
+  outputAmount: number     // 合同产值（正数或负数）
+}
 
 // 格式化金额 - 千分位分隔符，保留2位小数
 const formatAmount = (amount: number | undefined | null): string => {
@@ -95,13 +103,8 @@ const formatIdCard = (idCard: string | undefined | null): string => {
   return idCard
 }
 
-// 空间类型映射
-const spaceTypeMap: Record<string, string> = {
-  'kitchen': '厨房',
-  'mainBathroom': '主卫',
-}
-
 // 业务类型映射
+
 const businessTypeMap: Record<string, string> = {
   'family_help': '家庭帮',
   'pipe_water': '管道直饮水',
@@ -154,11 +157,37 @@ const generateMockDetailData = (id: number): ProjectDetailData => {
   }
 }
 
+// 生成合同产值模拟数据
+const generateMockContractOutput = (projectId: number): ContractOutputRecord[] => {
+  const records: ContractOutputRecord[] = [
+    {
+      id: `CCZ${projectId}00001`,
+      contractCode: `HT202603150000${projectId}`,
+      confirmTime: '2026-03-15 23:45:13',
+      outputAmount: 999.99,
+    },
+    {
+      id: `CCZ${projectId}00002`,
+      contractCode: `HT202603150000${projectId}`,
+      confirmTime: '2026-03-10 10:30:00',
+      outputAmount: 1500.00,
+    },
+    {
+      id: `CCZ${projectId}00003`,
+      contractCode: `HT202603100000${projectId}`,
+      confirmTime: '2026-03-05 15:20:45',
+      outputAmount: -500.00,
+    },
+  ]
+  return records
+}
+
 const ProjectSaleDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>()
   const [loading, setLoading] = useState(true)
   const [projectData, setProjectData] = useState<ProjectDetailData | null>(null)
   const [activeTab, setActiveTab] = useState<TabKey>('basic')
+  const [contractOutputData, setContractOutputData] = useState<ContractOutputRecord[]>([])
 
   // 模拟获取项目详情数据
   useEffect(() => {
@@ -174,6 +203,8 @@ const ProjectSaleDetail: React.FC = () => {
         if (projectId > 0 && projectId <= 100) {
           const data = generateMockDetailData(projectId)
           setProjectData(data)
+          // 生成合同产值模拟数据
+          setContractOutputData(generateMockContractOutput(projectId))
         } else {
           message.error('项目不存在')
         }
@@ -204,6 +235,8 @@ const ProjectSaleDetail: React.FC = () => {
         return <div className={styles.emptyContent}>报价单模块开发中...</div>
       case 'contract':
         return <div className={styles.emptyContent}>关联合同模块开发中...</div>
+      case 'contractOutput':
+        return renderContractOutput()
       case 'budget':
         return <div className={styles.emptyContent}>预算单模块开发中...</div>
       case 'budgetDetail':
@@ -219,6 +252,81 @@ const ProjectSaleDetail: React.FC = () => {
       default:
         return null
     }
+  }
+
+// 渲染合同产值标签页内容
+  const renderContractOutput = () => {
+    // 计算合同产值总计
+    const totalOutput = contractOutputData.reduce((sum, record) => sum + record.outputAmount, 0)
+
+    // 获取金额样式类名
+    const getAmountClassName = (amount: number): string => {
+      if (amount > 0) return styles.outputPositive
+      if (amount < 0) return styles.outputNegative
+      return styles.outputZero
+    }
+
+// 格式化金额显示
+    const formatOutputAmount = (amount: number): string => {
+      if (amount > 0) return `¥${formatAmount(amount)}`
+      if (amount < 0) return `-¥${formatAmount(Math.abs(amount))}`
+      return `¥${formatAmount(amount)}`
+    }
+
+    return (
+      <div className={styles.basicInfoContent}>
+        {/* 合同产值总计 */}
+        <div className={styles.section}>
+          <div className={styles.totalOutput}>
+            合同产值总计：
+            <span className={getAmountClassName(totalOutput)}>
+              {formatOutputAmount(totalOutput)}
+            </span>
+          </div>
+        </div>
+        
+        {/* 合同产值记录列表 */}
+        <div className={styles.section}>
+          <Table
+            dataSource={contractOutputData}
+            rowKey="id"
+            pagination={false}
+            className={styles.contractOutputTable}
+            size="small"
+          >
+            <Table.Column 
+              title="合同产值记录ID" 
+              dataIndex="id" 
+              key="id"
+              width={180}
+            />
+            <Table.Column 
+              title="合同编号" 
+              dataIndex="contractCode" 
+              key="contractCode"
+              width={180}
+            />
+            <Table.Column 
+              title="合同产值确认时间" 
+              dataIndex="confirmTime" 
+              key="confirmTime"
+              width={200}
+            />
+            <Table.Column 
+              title="合同产值" 
+              dataIndex="outputAmount" 
+              key="outputAmount"
+              width={150}
+              render={(amount: number) => (
+                <span className={getAmountClassName(amount)}>
+                  {formatOutputAmount(amount)}
+                </span>
+              )}
+            />
+          </Table>
+        </div>
+      </div>
+    )
   }
 
   // 渲染基本信息标签页内容
@@ -315,7 +423,7 @@ const ProjectSaleDetail: React.FC = () => {
     )
   }
 
-  // 标签页配置
+// 标签页配置
   const tabItems: TabsProps['items'] = [
     {
       key: 'basic',
@@ -330,6 +438,11 @@ const ProjectSaleDetail: React.FC = () => {
     {
       key: 'contract',
       label: '关联合同',
+      children: renderTabContent(),
+    },
+    {
+      key: 'contractOutput',
+      label: '合同产值',
       children: renderTabContent(),
     },
     {

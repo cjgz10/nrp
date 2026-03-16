@@ -122,3 +122,36 @@
   color: #999;
   font-size: 14px;
 }
+
+// 合同产值表格
+.contractOutputTable {
+  :global(.ant-table-thead > tr > th) {
+    background-color: #fafafa;
+  }
+}
+
+// 合同产值-正数（绿色）
+.outputPositive {
+  color: #52c41a;
+  font-weight: 500;
+}
+
+// 合同产值-负数（红色）
+.outputNegative {
+  color: #ff4d4f;
+  font-weight: 500;
+}
+
+// 合同产值-零（常规黑色）
+.outputZero {
+  color: #333;
+  font-weight: 500;
+}
+
+// 合同产值总计
+.totalOutput {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  display: inline-block;
+}
