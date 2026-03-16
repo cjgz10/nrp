@@ -1,0 +1,109 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 68px);
+}
+
+.filterCard {
+  flex-shrink: 0;
+  
+  :global(.ant-card-body) {
+    padding: 16px;
+  }
+}
+
+.filterForm {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+
+  :global(.ant-form-item) {
+    margin-bottom: 8px;
+  }
+}
+
+.tableCard {
+  flex: 1;
+  margin-top: 16px;
+  margin-bottom: 56px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  
+  :global(.ant-card-body) {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+  }
+  
+  :global(.ant-table-wrapper) {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  :global(.ant-table) {
+    flex: 1;
+    overflow: hidden;
+  }
+  
+  :global(.ant-table-container) {
+    flex: 1;
+    overflow: hidden;
+  }
+  
+  :global(.ant-table-header) {
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  
+  :global(.ant-table-body) {
+    overflow: auto !important;
+  }
+}
+
+.tableHeader {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 16px;
+}
+
+.addButton {
+  color: #ffffff !important;
+}
+
+// 分页组件 - 固定在底部（只在内容区域）
+.paginationWrapper {
+  position: fixed;
+  bottom: 0;
+  left: 230px;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: flex-end;
+  padding: 12px 26px 12px 16px;
+  background: #ffffff;
+  border-top: 1px solid #f0f0f0;
+}
+
+// 修复查询按钮文字颜色问题
+.searchButton {
+  color: #ffffff !important;
+}
+
+.resetButton {
+  color: #666666 !important;
+}
+
+// 修复多选Select不换行
+.companySelectWrap {
+  :global(.ant-select-selection-wrap) {
+    flex-wrap: nowrap !important;
+  }
+  
+  :global(.ant-select-selection-item) {
+    white-space: nowrap !important;
+  }
+}

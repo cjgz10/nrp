@@ -1,0 +1,124 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 68px);
+  padding: 5px;
+}
+
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 68px);
+}
+
+.contentCard {
+  flex: 1;
+  overflow: hidden;
+  
+  :global(.ant-card-body) {
+    padding: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.tabs {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  
+  :global(.ant-tabs-nav) {
+    margin-bottom: 0;
+    padding: 0 16px;
+    background: #fff;
+    
+    &::before {
+      border-bottom: 1px solid #f0f0f0;
+    }
+  }
+  
+  :global(.ant-tabs-content-holder) {
+    flex: 1;
+    overflow: auto;
+  }
+  
+  :global(.ant-tabs-content) {
+    height: 100%;
+  }
+  
+  :global(.ant-tabs-tabpane) {
+    height: 100%;
+  }
+}
+
+.basicInfoContent {
+  padding: 16px;
+}
+
+.section {
+  margin-bottom: 24px;
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.sectionTitle {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 12px;
+  padding-left: 8px;
+  border-left: 3px solid #FF6900;
+}
+
+.descriptions {
+  :global(.ant-descriptions-item-label) {
+    width: 140px;
+    background-color: #fafafa;
+    font-weight: 500;
+    color: #666;
+  }
+  
+  :global(.ant-descriptions-item-content) {
+    width: calc(33.33% - 93px);
+  }
+  
+  // 金额样式
+  .amount {
+    color: #FF6900;
+    font-weight: 500;
+  }
+  
+  // 百分比样式
+  .percent {
+    color: #52c41a;
+    font-weight: 500;
+  }
+  
+  // 空值样式
+  .emptyValue {
+    color: #999;
+  }
+}
+
+// 空间信息表格
+.spaceTable {
+  max-width: 400px;
+  
+  :global(.ant-table-thead > tr > th) {
+    background-color: #fafafa;
+  }
+}
+
+// 空内容占位
+.emptyContent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  color: #999;
+  font-size: 14px;
+}

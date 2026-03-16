@@ -1,0 +1,92 @@
+/**
+ * 全局样式
+ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+    'Noto Color Emoji';
+  font-size: 14px;
+  color: #333;
+  background-color: #f5f5f5;
+}
+
+/* 自定义滚动条 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* 页面切换动画 */
+.page-enter {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.page-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.page-exit {
+  opacity: 1;
+}
+
+.page-exit-active {
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+/* ============================================
+ * 菜单层级样式 - 全局优先级
+ * 一级目录比二级目录字体大2号，二级目录比三级菜单字体大2号
+ * 一级目录、二级目录字体加粗
+ * ============================================ */
+
+/* 一级目录（顶级菜单：销售中心、采购中心） */
+.ant-menu.ant-menu-inline > .ant-menu-item > .ant-menu-title-content,
+.ant-menu.ant-menu-inline > .ant-menu-submenu > .ant-menu-submenu-title > .ant-menu-title-content {
+  font-size: 16px !important;
+  font-weight: 600 !important;
+}
+
+/* 二级目录（订单管理、采购管理） */
+.ant-menu.ant-menu-inline > .ant-menu-submenu > .ant-menu-inline > .ant-menu-item > .ant-menu-title-content,
+.ant-menu.ant-menu-inline > .ant-menu-submenu > .ant-menu-inline > .ant-menu-submenu > .ant-menu-submenu-title > .ant-menu-title-content {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+}
+
+/* 三级目录（订单列表、售后列表等） */
+.ant-menu.ant-menu-inline > .ant-menu-submenu > .ant-menu-inline > .ant-menu-submenu > .ant-menu-inline > .ant-menu-item > .ant-menu-title-content {
+  font-size: 12px !important;
+  font-weight: normal !important;
+}

@@ -1,0 +1,331 @@
+/**
+ * 主布局样式
+ * Orange Theme - 橙色主题
+ */
+
+// 主题色
+@primary-color: #FF6900;
+
+// 布局尺寸
+@sider-width: 220px;
+@sider-collapsed-width: 80px;
+@header-height: 48px;
+
+// 主布局
+.main-layout {
+  min-height: 100vh;
+}
+
+// 侧边栏
+.layout-sider {
+  background-color: #fff !important;
+  border-right: 1px solid #f0f0f0;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+  z-index: 100;
+  position: fixed !important;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+
+  // Logo 容器
+  .logo-container {
+    height: @header-height;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid #f0f0f0;
+    background-color: @primary-color;
+    flex-shrink: 0;
+    
+    .logo-icon {
+      font-size: 24px;
+      font-weight: bold;
+      color: #fff;
+    }
+    
+    .logo-text {
+      font-size: 18px;
+      font-weight: 600;
+      color: #fff;
+      letter-spacing: 1px;
+    }
+  }
+
+  // 菜单容器
+  .layout-menu {
+    flex: 1;
+    padding: 12px 0;
+    overflow-y: auto;
+    min-height: 0;
+    
+    // 菜单项
+    .ant-menu-item,
+    .ant-menu-submenu-title {
+      margin: 4px 8px;
+      border-radius: 8px;
+      
+      &:hover {
+        color: @primary-color;
+        
+        .anticon {
+          color: @primary-color;
+        }
+      }
+    }
+
+    // 选中状态
+    .ant-menu-item-selected {
+      background-color: rgba(255, 105, 0, 0.1) !important;
+      color: @primary-color !important;
+      
+      &::after {
+        border-right-color: @primary-color !important;
+      }
+    }
+
+    // 子菜单展开
+    .ant-menu-submenu-open {
+      .ant-menu-submenu-title {
+        &:hover {
+          color: @primary-color;
+        }
+      }
+    }
+
+    // 菜单子项选中
+    .ant-menu-item-selected {
+      background-color: rgba(255, 105, 0, 0.1);
+      
+      &::after {
+        border-right-color: @primary-color;
+      }
+    }
+  }
+
+  // 侧边栏底部 - 绝对定位固定在底部
+  .sider-footer {
+    height: 48px;
+    border-top: 1px solid #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 8px;
+    flex-shrink: 0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    
+    .sider-actions {
+      display: flex;
+      gap: 4px;
+      width: 100%;
+      justify-content: space-around;
+      
+      .sider-action-btn {
+        font-size: 18px;
+        color: #666;
+        padding: 8px;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        
+        &:hover {
+          color: @primary-color;
+          background-color: rgba(255, 105, 0, 0.1);
+        }
+      }
+    }
+  }
+}
+
+// 头部
+.layout-header {
+  background-color: #fff !important;
+  padding: 0 16px !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #f0f0f0;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  height: @header-height;
+  line-height: @header-height;
+  margin-left: @sider-width;
+  transition: margin-left 0.2s;
+
+  .ant-layout-sider-collapsed + .ant-layout & {
+    margin-left: @sider-collapsed-width;
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    gap: 16px;
+    overflow: hidden;
+  }
+
+  // 折叠按钮
+  .trigger-button {
+    font-size: 16px;
+    padding: 4px 8px;
+    height: auto;
+    flex-shrink: 0;
+    
+    &:hover {
+      color: @primary-color;
+    }
+  }
+
+  // 右侧内容
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    .user-info {
+      color: #666;
+      font-size: 14px;
+    }
+  }
+}
+
+// 折叠时的头部
+.ant-layout-sider-collapsed + .ant-layout .layout-header {
+  margin-left: @sider-collapsed-width;
+}
+
+// 内容区域
+.layout-content {
+  margin: 10px;
+  margin-left: calc(@sider-width + 10px);
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 8px;
+  min-height: calc(100vh - @header-height - 20px);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  transition: margin-left 0.2s;
+}
+
+// 折叠时的内容区域
+.ant-layout-sider-collapsed ~ .ant-layout .layout-content {
+  margin-left: calc(@sider-collapsed-width + 10px);
+}
+
+// 菜单箭头颜色
+.ant-menu-submenu-arrow {
+  &::before,
+  &::after {
+    background: #666;
+  }
+}
+
+// 菜单折叠时的样式
+.ant-layout-sider-collapsed {
+  .logo-container {
+    .logo-icon {
+      font-size: 20px;
+    }
+  }
+}
+
+// 菜单项图标
+.anticon {
+  font-size: 16px;
+}
+
+// 菜单项文字 - 基础样式，由层级样式覆盖
+.ant-menu-title-content {
+  // 字体大小和粗细由 layout-menu 内的层级样式控制
+}
+
+// ============================================
+// 菜单层级样式 - 按要求调整
+// 一级目录比二级目录字体大2号，二级目录比三级菜单字体大2号
+// 一级目录、二级目录字体加粗
+// ============================================
+
+// 定义字体大小变量
+@level1-font-size: 16px;  // 一级目录 - 最大
+@level2-font-size: 14px;  // 二级目录 - 中间
+@level3-font-size: 12px;  // 三级目录 - 最小
+
+// 菜单文字样式
+.layout-menu {
+  // ===== 一级目录（顶级菜单：销售中心、采购中心）=====
+  // 顶级菜单项
+  > .ant-menu-item {
+    font-size: @level1-font-size !important;
+    font-weight: 600 !important;
+  }
+  
+  // 顶级子菜单标题（一级目录有子菜单的）
+  > .ant-menu-submenu > .ant-menu-submenu-title {
+    font-size: @level1-font-size !important;
+    font-weight: 600 !important;
+    
+    .ant-menu-title-content {
+      font-size: @level1-font-size !important;
+      font-weight: 600 !important;
+    }
+  }
+
+  // ===== 二级目录（订单管理、采购管理）=====
+  // 二级菜单项
+  .ant-menu-submenu > .ant-menu-inline > .ant-menu-item {
+    font-size: @level2-font-size !important;
+    font-weight: 600 !important;
+  }
+  
+  // 二级子菜单标题
+  .ant-menu-submenu > .ant-menu-inline > .ant-menu-submenu-title {
+    font-size: @level2-font-size !important;
+    font-weight: 600 !important;
+    
+    .ant-menu-title-content {
+      font-size: @level2-font-size !important;
+      font-weight: 600 !important;
+    }
+  }
+
+  // ===== 三级目录（订单列表、售后列表等）=====
+  // 三级菜单项
+  .ant-menu-submenu > .ant-menu-inline > .ant-menu-submenu > .ant-menu-inline > .ant-menu-item {
+    font-size: @level3-font-size !important;
+    font-weight: normal !important;
+  }
+}
+
+// 直接针对 ant-menu-title-content 设置样式
+.layout-menu {
+  // 一级菜单标题
+  > .ant-menu-submenu > .ant-menu-submenu-title > .ant-menu-title-content {
+    font-size: @level1-font-size !important;
+    font-weight: 600 !important;
+  }
+  
+  // 二级菜单标题
+  .ant-menu-sub > .ant-menu-submenu-title > .ant-menu-title-content {
+    font-size: @level2-font-size !important;
+    font-weight: 600 !important;
+  }
+  
+  // 二级菜单项
+  .ant-menu-sub > .ant-menu-item > .ant-menu-title-content {
+    font-size: @level2-font-size !important;
+    font-weight: 600 !important;
+  }
+  
+  // 三级菜单标题和菜单项
+  .ant-menu-sub > .ant-menu-sub > .ant-menu-item > .ant-menu-title-content,
+  .ant-menu-sub > .ant-menu-sub > .ant-menu-submenu-title > .ant-menu-title-content {
+    font-size: @level3-font-size !important;
+    font-weight: normal !important;
+  }
+}
