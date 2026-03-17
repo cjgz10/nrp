@@ -158,23 +158,31 @@ const generateMockDetailData = (id: number): ProjectDetailData => {
 }
 
 // 生成合同产值模拟数据
+// 规则：HTCZ + {合同编号后13位数字} + {两位数自增数字}
 const generateMockContractOutput = (projectId: number): ContractOutputRecord[] => {
+  // 合同编号示例：HT2026031500001，后13位为 2026031500001
+  const contractCode1 = `HT202603150000${projectId}`
+  const contractCodeSuffix1 = contractCode1.substring(2, 15) // 获取后13位数字
+  
+  const contractCode2 = `HT202603100000${projectId}`
+  const contractCodeSuffix2 = contractCode2.substring(2, 15) // 获取后13位数字
+
   const records: ContractOutputRecord[] = [
     {
-      id: `CCZ${projectId}00001`,
-      contractCode: `HT202603150000${projectId}`,
+      id: `HTCZ${contractCodeSuffix1}01`,
+      contractCode: contractCode1,
       confirmTime: '2026-03-15 23:45:13',
       outputAmount: 999.99,
     },
     {
-      id: `CCZ${projectId}00002`,
-      contractCode: `HT202603150000${projectId}`,
+      id: `HTCZ${contractCodeSuffix1}02`,
+      contractCode: contractCode1,
       confirmTime: '2026-03-10 10:30:00',
       outputAmount: 1500.00,
     },
     {
-      id: `CCZ${projectId}00003`,
-      contractCode: `HT202603100000${projectId}`,
+      id: `HTCZ${contractCodeSuffix2}03`,
+      contractCode: contractCode2,
       confirmTime: '2026-03-05 15:20:45',
       outputAmount: -500.00,
     },
