@@ -64,7 +64,11 @@ interface ContractOutputRecord {
   id: string               // 合同产值记录ID（唯一编码）
   contractCode: string     // 合同编号
   confirmTime: string      // 合同产值确认时间
-  outputAmount: number     // 合同产值（正数或负数）
+  outputAmount: number     // 合同产值增量（正数或负数）
+  projectAmount: number    // 当前项目金额
+  receivedAmount: number    // 当前项目收款金额
+  receiptRatio: number      // 收款比例
+  totalOutput: number       // 当前合同产值总计
 }
 
 // 格式化金额 - 千分位分隔符，保留2位小数
@@ -158,33 +162,55 @@ const generateMockDetailData = (id: number): ProjectDetailData => {
 }
 
 // 生成合同产值模拟数据
-// 规则：HTCZ + {合同编号后13位数字} + {两位数自增数字}
+// 规则：HTCZ + {项目编号后13位数字} + {两位数自增数字}
 const generateMockContractOutput = (projectId: number): ContractOutputRecord[] => {
-  // 合同编号示例：HT2026031500001，后13位为 2026031500001
+  // 项目编号示例：JTB2026031400001，后13位为 2026031400001
+  const projectCode = `JTB202603140000${projectId}`
+  const projectCodeSuffix = projectCode.substring(3, 16) // 获取后13位数字
+
+  // 合同编号示例：HT2026031500001
   const contractCode1 = `HT202603150000${projectId}`
-  const contractCodeSuffix1 = contractCode1.substring(2, 15) // 获取后13位数字
-  
-  const contractCode2 = `HT202603100000${projectId}`
-  const contractCodeSuffix2 = contractCode2.substring(2, 15) // 获取后13位数字
 
   const records: ContractOutputRecord[] = [
     {
-      id: `HTCZ${contractCodeSuffix1}01`,
+      id: `HTCZ${projectCodeSuffix}01`,
       contractCode: contractCode1,
-      confirmTime: '2026-03-15 23:45:13',
-      outputAmount: 999.99,
+      confirmTime: '2026/3/14 18:45:00',
+      outputAmount: 60000.00,
+      projectAmount: 60000.00,
+      receivedAmount: 40000.00,
+      receiptRatio: 66.67,
+      totalOutput: 60000.00,
     },
     {
-      id: `HTCZ${contractCodeSuffix1}02`,
+      id: `HTCZ${projectCodeSuffix}02`,
       contractCode: contractCode1,
-      confirmTime: '2026-03-10 10:30:00',
-      outputAmount: 1500.00,
+      confirmTime: '2026/3/15 09:15:00',
+      outputAmount: 10000.00,
+      projectAmount: 70000.00,
+      receivedAmount: 45000.00,
+      receiptRatio: 64.29,
+      totalOutput: 70000.00,
     },
     {
-      id: `HTCZ${contractCodeSuffix2}03`,
-      contractCode: contractCode2,
-      confirmTime: '2026-03-05 15:20:45',
-      outputAmount: -500.00,
+      id: `HTCZ${projectCodeSuffix}03`,
+      contractCode: contractCode1,
+      confirmTime: '2026/3/16 15:20:00',
+      outputAmount: -5000.00,
+      projectAmount: 65000.00,
+      receivedAmount: 45000.00,
+      receiptRatio: 69.23,
+      totalOutput: 65000.00,
+    },
+    {
+      id: `HTCZ${projectCodeSuffix}04`,
+      contractCode: contractCode1,
+      confirmTime: '2026/3/17 10:30:00',
+      outputAmount: -55000.00,
+      projectAmount: 10000.00,
+      receivedAmount: 10000.00,
+      receiptRatio: 100.00,
+      totalOutput: 10000.00,
     },
   ]
   return records
@@ -309,19 +335,57 @@ const ProjectSaleDetail: React.FC = () => {
               width={180}
             />
             <Table.Column 
-              title="合同编号" 
-              dataIndex="contractCode" 
-              key="contractCode"
-              width={180}
-            />
-            <Table.Column 
               title="合同产值确认时间" 
               dataIndex="confirmTime" 
               key="confirmTime"
               width={200}
             />
             <Table.Column 
-              title="合同产值" 
+              title="当前项目金额" 
+              dataIndex="projectAmount"
+              key="projectAmount"
+              width={150}
+              render={(amount: number) => (
+                <span className={styles.amount}>
+                  ¥{formatAmount(amount)}
+                </span>
+              )}
+            />
+            <Table.Column 
+              title="当前项目收款金额" 
+              dataIndex="receivedAmount"
+              key="receivedAmount"
+              width={150}
+              render={(amount: number) => (
+                <span className={styles.amount}>
+                  ¥{formatAmount(amount)}
+                </span>
+              )}
+            />
+            <Table.Column 
+              title="当前收款比例" 
+              dataIndex="receiptRatio"
+              key="receiptRatio"
+              width={100}
+              render={(ratio: number) => (
+                <span className={styles.percent}>
+                  {formatPercent(ratio)}
+                </span>
+              )}
+            />
+            <Table.Column 
+              title="当前合同产值总计" 
+              dataIndex="totalOutput"
+              key="totalOutput"
+              width={150}
+              render={(amount: number) => (
+                <span className={getAmountClassName(amount)}>
+                  {formatOutputAmount(amount)}
+                </span>
+              )}
+            />
+            <Table.Column 
+              title="合同产值增量" 
               dataIndex="outputAmount" 
               key="outputAmount"
               width={150}
